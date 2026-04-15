@@ -8,7 +8,10 @@ public class ThirdPersonCamera : MonoBehaviour
     [Header("Camera Positioning")]
     public float distance = 3f;
     public float heightOffset = 1.5f;
-    public float shoulderOffset = 0.8f; // push camera to right shoulder
+    public float shoulderOffset = 0.8f;
+
+    [Header("View Framing")]
+    public float aimOffset = 0.5f; // <-- add this (shifts view to the right)
 
     [Header("Sensitivity & Limits")]
     public float mouseSensitivity = 100f;
@@ -30,27 +33,22 @@ public class ThirdPersonCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        // Mouse input
         yaw += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         pitch -= Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
 
-        // Rotation based on yaw/pitch
         Quaternion rotation = Quaternion.Euler(pitch, yaw, 0f);
 
-        // Base position above player
         Vector3 basePosition = player.position + Vector3.up * heightOffset;
 
-        // Backward offset (distance behind player)
+        // Backward offset
         Vector3 backwardOffset = rotation * Vector3.back * distance;
 
-        // Shoulder offset applied relative to player's right (not rotated with pitch/yaw)
+        // Shoulder offset (right side)
         Vector3 shoulder = player.right * shoulderOffset;
 
-        // Desired position
         Vector3 desiredPosition = basePosition + backwardOffset + shoulder;
 
-        // Collision check
         Vector3 direction = desiredPosition - basePosition;
         float targetDistance = distance;
 
@@ -60,10 +58,10 @@ public class ThirdPersonCamera : MonoBehaviour
             desiredPosition = basePosition + rotation * Vector3.back * targetDistance + shoulder;
         }
 
-        // Final camera position
         transform.position = desiredPosition;
 
-        // Always look at player
-        transform.LookAt(basePosition);
+        // SHIFT LOOK TARGET TO THE RIGHT
+        Vector3 lookTarget = basePosition + player.right * aimOffset;
+        transform.LookAt(lookTarget);
     }
 }
