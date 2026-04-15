@@ -11,7 +11,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public float shoulderOffset = 0.8f;
 
     [Header("View Framing")]
-    public float aimOffset = 0.5f; // <-- add this (shifts view to the right)
+    public float aimOffset = 0.5f;
 
     [Header("Sensitivity & Limits")]
     public float mouseSensitivity = 100f;
@@ -41,10 +41,8 @@ public class ThirdPersonCamera : MonoBehaviour
 
         Vector3 basePosition = player.position + Vector3.up * heightOffset;
 
-        // Backward offset
         Vector3 backwardOffset = rotation * Vector3.back * distance;
 
-        // Shoulder offset (right side)
         Vector3 shoulder = player.right * shoulderOffset;
 
         Vector3 desiredPosition = basePosition + backwardOffset + shoulder;
@@ -60,7 +58,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
         transform.position = desiredPosition;
 
-        // SHIFT LOOK TARGET TO THE RIGHT
         Vector3 lookTarget = basePosition + player.right * aimOffset;
         transform.LookAt(lookTarget);
     }
