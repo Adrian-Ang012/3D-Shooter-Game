@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "3D-Shooter-Game.slnx"
+    "dotnet.defaultSolution": "Shooting Game.slnx"
 }
